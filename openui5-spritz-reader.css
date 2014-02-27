@@ -1,0 +1,39 @@
+.spritzreader {
+    padding: 20px;
+    border: 1px solid black;
+    width: 200px;
+    font-size: 20pt;
+    margin-bottom: 30px;
+    position: relative;
+    height: 15px;
+    line-height: 15px;
+}
+
+.spritzreader::before, .spritzreader::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 50%;
+    margin-left: -1px;
+    height: 10px;
+    background-color: black;
+    width: 2px;
+    top: 0;
+}
+
+.spritzreader::after {
+    top: auto;
+    bottom: 0;
+}
+
+.spritzword {
+    position: absolute;
+}
+
+.spritzhighlight {
+    color: #c00;
+}
+
+.sapMVBox.marginBoxContent{
+    padding: 1em;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>  
+<html><head>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />  
+<title>openui5-cards</title>  
+
+<!--Standard sapui5 init-->
+<script id="sap-ui-bootstrap" 
+    src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js" 
+    data-sap-ui-theme="sap_bluecrystal"
+    data-sap-ui-libs="sap.m,sap.ui.commons"></script> 
+
+<link href="openui5-spritz-reader.css" type="text/css" rel="stylesheet"/>
+<script src="openui5-spritz-reader.js"></script>
+
+
+<script>
+var spritzReader = new open.m.SpritzReader({wordsPrMin:500, text:"UI5 lets you build enterprise-ready web applications, responsive to all devices, running on almost any browser of your choice. It's based on JavaScript, using JQuery as its foundation and follows web standards. It eases your development with a client-side HTML5 rendering library including a rich set of controls and supports data binding to different models (JSON, XML and OData). Try it! Check out our Explored application for controls running on phones, tablets and desktops, the interactive control playground for controls running on desktops as well as a number of sample applications. Get it! It's free. Download the latest UI5 Runtime, the UI5 SDK containing all documentation, or go to the download page for more options. Get Started! Try the Hello World, read the Developer Guide and refer to the API Reference. What's next? On top of the regular download package updates, source files will be transferred into a github repository. We'll offer build and assembly steps for e.g. CSS calculation and packaging soon. Once these are available contributions can be considered. Don't forget to stay awesome"});
+
+
+var startButton  =new sap.m.Button({text:"Start"});
+startButton.attachPress(function(){spritzReader.start()});
+var labelWpm = new sap.m.Label("labelWpm", {text:spritzReader.getWordsPrMin()+" words pr minute"});
+
+var slider = new sap.m.Slider(
+    {   min:200,
+        max:2000,
+        step:50,
+        value:500, 
+        width:"300px",
+        liveChange : function(oEvent){
+            var value=oEvent.getParameters("liveValue").value ;
+            sap.ui.getCore().getControl("labelWpm").setText(value+ " words pr minute");
+            spritzReader.setWordsPrMin(value);
+        }
+    });
+
+
+var vbox = new sap.m.VBox();
+vbox.addItem(spritzReader);
+vbox.addItem(labelWpm);
+vbox.addItem(slider);
+vbox.addItem(startButton);
+vbox.addStyleClass("marginBoxContent");
+
+var pageContent = new sap.m.Page("openui5-spritz-reader",{title:"OpenUI5-Spritz-Reader", showHeader:true, showFooter:false});
+pageContent.addContent(vbox);
+
+var app = new sap.m.App({initialPage:"openui5-spritz-reader"});
+app.placeAt("content");
+app.addPage(pageContent);
+
+
+</script>
+
+</head>
+<body class="sapUiBody">
+    <div id="content"></div>
+</body>
+</html>
