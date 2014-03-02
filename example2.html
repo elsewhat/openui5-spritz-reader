@@ -1,0 +1,70 @@
+<!DOCTYPE html>  
+<html><head>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />  
+<title>openui5-cards</title>  
+
+<!--Standard sapui5 init-->
+<script id="sap-ui-bootstrap" 
+    src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js" 
+    data-sap-ui-theme="sap_bluecrystal"
+    data-sap-ui-libs="sap.m,sap.ui.commons"></script> 
+
+<link href="openui5-spritz-reader.css" type="text/css" rel="stylesheet"/>
+<script src="openui5-spritz-reader.js"></script>
+
+
+<script>
+var redditJsonUrl="http://www.reddit.com/.json";
+var oModel = new sap.ui.model.json.JSONModel(redditJsonUrl);
+oModel.attachRequestCompleted(
+            function(){
+                alert("got here!");
+                }
+);
+
+
+
+var redditText = "";
+var spritzReader = new open.m.SpritzReader({wordsPrMin:500, text:redditText});
+
+
+var startButton  =new sap.m.Button({text:"Start"});
+startButton.attachPress(function(){spritzReader.start()});
+var labelWpm = new sap.m.Label("labelWpm", {text:spritzReader.getWordsPrMin()+" words pr minute"});
+
+var slider = new sap.m.Slider(
+    {   min:200,
+        max:2000,
+        step:50,
+        value:500, 
+        width:"300px",
+        liveChange : function(oEvent){
+            var value=oEvent.getParameters("liveValue").value ;
+            sap.ui.getCore().getControl("labelWpm").setText(value+ " words pr minute");
+            spritzReader.setWordsPrMin(value);
+        }
+    });
+
+
+var vbox = new sap.m.VBox();
+vbox.addItem(spritzReader);
+vbox.addItem(labelWpm);
+vbox.addItem(slider);
+vbox.addItem(startButton);
+vbox.addStyleClass("marginBoxContent");
+
+var pageContent = new sap.m.Page("openui5-spritz-reader",{title:"OpenUI5-Spritz-Reader", showHeader:true, showFooter:false});
+pageContent.addContent(vbox);
+
+var app = new sap.m.App({initialPage:"openui5-spritz-reader"});
+app.placeAt("content");
+app.addPage(pageContent);
+
+
+</script>
+
+</head>
+<body class="sapUiBody">
+    <div id="content"></div>
+</body>
+</html>

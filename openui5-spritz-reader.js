@@ -4,8 +4,10 @@ sap.ui.core.Control.extend("open.m.SpritzReader", {
             "text": "string",
             "highlightColor" : "string",
             "wordsPrMin": {type : "int", defaultValue : 250},
+        },aggregations: {
+            items: {type : "open.m.SpritzReaderItem", multiple : true},
         },events: {
-
+            itemRead:{},
         },
     },
 
@@ -16,6 +18,10 @@ sap.ui.core.Control.extend("open.m.SpritzReader", {
     start:function(){
         var that=this;
         
+        //TODO: Check if we are using text or multiple items
+        //that.fireItemRead
+
+
         //clearTimeout(currentTimer);
         var currentWord = 0;
         var text = that.getText();
@@ -99,6 +105,14 @@ sap.ui.core.Control.extend("open.m.SpritzReader", {
 
         oRm.write("<div class=\"spritzword\"/>");
         oRm.write("</div>");
+    },
+});
+
+sap.ui.core.Control.extend("open.m.SpritzReaderItem", {
+    metadata : {
+        properties : {
+            "text" : "string"
+        }
     },
 });
 
