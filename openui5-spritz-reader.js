@@ -7,7 +7,10 @@ sap.ui.core.Control.extend("open.m.SpritzReader", {
         },aggregations: {
             items: {type : "open.m.SpritzReaderItem", multiple : true},
         },events: {
-            itemRead:{},
+            readingComplete:{},
+            readingStarting:{},
+            readingItemStarting:{},
+            readingItemComplete:{}
         },
     },
 
@@ -17,9 +20,8 @@ sap.ui.core.Control.extend("open.m.SpritzReader", {
 
     start:function(){
         var that=this;
-        
+        this.fireReadingStarting();
         //TODO: Check if we are using text or multiple items
-        //that.fireItemRead
 
 
         //clearTimeout(currentTimer);
@@ -32,9 +34,6 @@ sap.ui.core.Control.extend("open.m.SpritzReader", {
             var readerEl = $(".spritzreader");
             var currentTimer = null;
 
-
-            
-            
 
             var wpm = that.getWordsPrMin();
             var delay = 60000 / parseInt(wpm, 10);
@@ -111,7 +110,8 @@ sap.ui.core.Control.extend("open.m.SpritzReader", {
 sap.ui.core.Control.extend("open.m.SpritzReaderItem", {
     metadata : {
         properties : {
-            "text" : "string"
+            "text" : "string",
+            "url" :"string"
         }
     },
 });
