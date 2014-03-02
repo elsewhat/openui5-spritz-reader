@@ -14,22 +14,62 @@
 
 
 <script>
-var redditJsonUrl="http://www.reddit.com/.json";
-var oModel = new sap.ui.model.json.JSONModel(redditJsonUrl);
-oModel.attachRequestCompleted(
-            function(){
-                alert("got here!");
-                }
-);
+//All models are JSONP based
+var modelsDefinition = [
+    {modelId:"guardian", checkBoxId:"checkboxSource1", name:"Guardian", url:"http://content.guardianapis.com/world?page-size=50&callback=?", itemPath:"/response/results"},
+    {modelId:"bbc",checkBoxId:"checkboxSource2", name:"BBC", url:"http://pipes.yahoo.com/pipes/pipe.run?_id=eb8dcd1d84e4aa323378ce219683878a&_render=json&_callback=?", itemPath:"/value/items"},
+]
+
+function bbcModelLoaded(){
+    alert('What to do here');
+}
+
+//Create all the models
+for (var i = 0; i<modelsDefinition.length;i++) {
+    var modelDef = modelsDefinition[i];
+
+    //need to define it as a function in order to get the parameter to the attachRequestCompleted to be correct
+    var setupModelSourceFunc = function setupModelSource(modelDef){
+        var oModel;
+        $.getJSON(modelDef.url, function(results) {
+            oModel= new sap.ui.model.json.JSONModel(results);
+            sap.ui.getCore().setModel(oModel,modelDef.modelId);
+            //enable checkbox when loaded
+            var checkbox= sap.ui.getCore().getControl(modelDef.checkBoxId)
+            checkbox.setEnabled(true);
+            checkbox.setText(checkbox.getText() + " ("+getNumElements(modelDef, oModel)+ ")");
+            checkbox.setTooltip("Check in order to read headlines from this source");
+        });           
+    }
+    setupModelSourceFunc(modelDef);
+}
+
+function getNumElements(modelDef, oModel){
+    var objItems = oModel.getObject(modelDef.itemPath);
+
+    if(objItems){
+        return objItems.length;
+    }else {
+        return 0;
+    }
+}
 
 
+var viewCheckboxContainer = new sap.m.HBox();
+//create all the source checkboxes
+for (var i = 0; i<modelsDefinition.length;i++) {
+    var modelDef = modelsDefinition[i];
 
-var redditText = "";
-var spritzReader = new open.m.SpritzReader({wordsPrMin:500, text:redditText});
+    var checkBox = new sap.m.CheckBox(modelDef.checkBoxId,{enabled:false, text:modelDef.name, tooltip: "Checkbox will be enabled when headlines have been loaded"});
+    viewCheckboxContainer.addItem(checkBox);
+}
 
+
+var spritzReader = new open.m.SpritzReader({wordsPrMin:500, text:"Dummy texts"});
 
 var startButton  =new sap.m.Button({text:"Start"});
 startButton.attachPress(function(){spritzReader.start()});
+
 var labelWpm = new sap.m.Label("labelWpm", {text:spritzReader.getWordsPrMin()+" words pr minute"});
 
 var slider = new sap.m.Slider(
@@ -49,6 +89,7 @@ var slider = new sap.m.Slider(
 var vbox = new sap.m.VBox();
 vbox.addItem(spritzReader);
 vbox.addItem(labelWpm);
+vbox.addItem(viewCheckboxContainer);
 vbox.addItem(slider);
 vbox.addItem(startButton);
 vbox.addStyleClass("marginBoxContent");
