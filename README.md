@@ -4,8 +4,8 @@ openui5-spritz-reader
 OpenUI5 implementation of the Spritz reader http://www.spritzinc.com/
 
 Examples:
-http://elsewhat.github.io/openui5-spritz-reader/cdn/0.1/example1.html
-http://elsewhat.github.io/openui5-spritz-reader/cdn/0.1/example1.html
+* http://elsewhat.github.io/openui5-spritz-reader/cdn/0.1/example1.html
+* http://elsewhat.github.io/openui5-spritz-reader/cdn/0.1/example2.html
 
 
 Acknowledgements
