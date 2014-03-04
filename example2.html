@@ -79,6 +79,13 @@ var spritzReader = new open.m.SpritzReader({
     }
 });
 
+//Create the list for read items
+var listReadItems = new sap.m.List({headerText:"Read items"});
+listReadItems.setModel(readItemsModel);
+var listReadItemTemplate = new sap.m.DisplayListItem({label:"{text}", value:"{url}"});
+listReadItems.bindAggregation("items","/",listReadItemTemplate);
+
+
 //Button for triggering the reading
 var startButton  =new sap.m.Button({text:"Start"});
 startButton.attachPress(
@@ -113,6 +120,7 @@ var slider = new sap.m.Slider(
 //layout the controls
 var vbox = new sap.m.VBox();
 vbox.addItem(spritzReader);
+vbox.addItem(listReadItems);
 vbox.addItem(labelWpm);
 vbox.addItem(viewCheckboxContainer);
 vbox.addItem(slider);
