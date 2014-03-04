@@ -142,6 +142,10 @@ sap.ui.core.Control.extend("open.m.SpritzReaderItem", {
             "url" :"string"
         }
     },
+
+    getData:function(){
+        return {text:this.getText(),url:this.getUrl()};
+    }
 });
 
 
