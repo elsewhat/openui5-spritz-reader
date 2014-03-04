@@ -61,12 +61,21 @@ function getNumElements(modelDef, oModel){
     }
 }
 
+var readItemsModel = new sap.ui.model.json.JSONModel()
+readItemsModel.setData([]);
+sap.ui.getCore().setModel(readItemsModel,"readItemsModel");
+
 //Create the main reader component
 var spritzReader = new open.m.SpritzReader({
     wordsPrMin:500, 
     readingItemComplete: function (evt,param){
         var spritzReaderItem = evt.getParameter("item");
         console.log("Read: "+ spritzReaderItem.getText());
+        
+        var readItemsModel = sap.ui.getCore().getModel("readItemsModel");
+        var readItemsData  = readItemsModel.getData();
+        readItemsData.push(spritzReaderItem.getData());
+        readItemsModel.setData(readItemsData);
     }
 });
 
