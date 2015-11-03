@@ -39,7 +39,8 @@ sap.ui.core.Control.extend("open.m.SpritzReader", {
 
         //clearTimeout(currentTimer);
         var currentWord = 0;
-        var words = text.split(/\s+/).map(that._processWord);
+        //var words = text.split(/\s+/).map(that._processWord);
+        var words = text.split(/[ ,.\?\(\)\/-]+/).map(that._processWord);
 
         var displayNextWord = function(){
             //refactor out of this method
@@ -142,6 +143,10 @@ sap.ui.core.Control.extend("open.m.SpritzReaderItem", {
             "url" :"string"
         }
     },
+
+    getData:function(){
+        return {text:this.getText(),url:this.getUrl()};
+    }
 });
 
 

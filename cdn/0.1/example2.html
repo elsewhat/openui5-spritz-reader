@@ -61,14 +61,30 @@ function getNumElements(modelDef, oModel){
     }
 }
 
+var readItemsModel = new sap.ui.model.json.JSONModel()
+readItemsModel.setData([]);
+sap.ui.getCore().setModel(readItemsModel,"readItemsModel");
+
 //Create the main reader component
 var spritzReader = new open.m.SpritzReader({
     wordsPrMin:500, 
     readingItemComplete: function (evt,param){
         var spritzReaderItem = evt.getParameter("item");
         console.log("Read: "+ spritzReaderItem.getText());
+        
+        var readItemsModel = sap.ui.getCore().getModel("readItemsModel");
+        var readItemsData  = readItemsModel.getData();
+        readItemsData.push(spritzReaderItem.getData());
+        readItemsModel.setData(readItemsData);
     }
 });
+
+//Create the list for read items
+var listReadItems = new sap.m.List({headerText:"Read items"});
+listReadItems.setModel(readItemsModel);
+var listReadItemTemplate = new sap.m.DisplayListItem({label:"{text}", value:"{url}"});
+listReadItems.bindAggregation("items","/",listReadItemTemplate);
+
 
 //Button for triggering the reading
 var startButton  =new sap.m.Button({text:"Start"});
@@ -104,6 +120,7 @@ var slider = new sap.m.Slider(
 //layout the controls
 var vbox = new sap.m.VBox();
 vbox.addItem(spritzReader);
+vbox.addItem(listReadItems);
 vbox.addItem(labelWpm);
 vbox.addItem(viewCheckboxContainer);
 vbox.addItem(slider);
